@@ -38,31 +38,16 @@
 			margin: 10px;
 		}
 
-
-		.circular-image {
-			width: 150px;
-			height: 150px;
-			border-radius: 50%;
-			object-fit: cover;
-			margin: 10px;
+		.image-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
 		}
 
-		.image-container {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			flex-wrap: wrap;
-		}
-
-		.image-caption {
-			text-align: center;
-			margin-top: 5px;
-		}
-
-		.image-wrapper {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
+		.image-grid img {
+			width: 100%;
+			height: auto;
+			display: block;
 		}
 	</style>
 </head>
@@ -74,15 +59,15 @@
 				<h2>RDF in Zarr</h2>
 			</section>
 			<section>
-				<h3>Introduction</h1>
+				<h3>Introduction</h3>
 					<section>
 						<ul>
 							<li class="fragment">Project sponsored by NumFocus</li>
 							<li class="fragment">Research project for Zarr technology</li>
 							<li class="fragment">Other projects sponsored by Numbfocus
 								<ul>
-									<li>Jupiter</li>
-									<li>MatPlotLib</li>
+									<li>Jupyter</li>
+									<li>Matplotlib</li>
 									<li>Pandas</li>
 								</ul>
 							</li>
@@ -100,7 +85,7 @@
 				</section>
 
 				<section>
-					Zarr is a project to store datasets bigger than RAM by loading only necessary chunks of information
+					Zarr is a project to store larger than RAM datasets by loading only necessary chunks of information
 					<div class="iframe-container fragment">
 						<iframe
 							src="https://hms-dbmi.github.io/vizarr/?source=https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.1/4495402.zarr&viewState={%22zoom%22:-8.886003229134696,%22target%22:[460800,190464]}"
@@ -122,36 +107,23 @@
 				<section>
 					RDF stores data in the form of triples
 					<p>(Subject, Predicate, Object)</p>
-					<img src="images/Basic_RDF_Graph.svg" alt="">
+					<img src="images/kg.svg" alt="">
 				</section>
 				<section>
-					Data dump example in ntriples format:
+					Data dump example in N-Triples format
 					<pre>
 						<code>
-					  PREFIX : <http://stardog.com/tutorial/>
-					  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-					  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-					  
-					  :The_Beatles      rdf:type  :Band .
-					  :The_Beatles      :name     "The Beatles" .
-					  :The_Beatles      :member   :John_Lennon .
-					  :The_Beatles      :member   :Paul_McCartney .
-					  :The_Beatles      :member   :Ringo_Starr .
-					  :The_Beatles      :member   :George_Harrison .
-					  :John_Lennon      rdf:type  :SoloArtist .
-					  :Paul_McCartney   rdf:type  :SoloArtist .
-					  :Ringo_Starr      rdf:type  :SoloArtist .
-					  :George_Harrison  rdf:type  :SoloArtist .
-					  :Please_Please_Me rdf:type  :Album .
-					  :Please_Please_Me :name     "Please Please Me" .
-					  :Please_Please_Me :date     "1963-03-22"^^xsd:date .
-					  :Please_Please_Me :artist   :The_Beatles .
-					  :Please_Please_Me :track    :Love_Me_Do .
-					  :Love_Me_Do       rdf:type  :Song .
-					  :Love_Me_Do       :name     "Love Me Do" .
-					  :Love_Me_Do       :length   125 .
-					  :Love_Me_Do       :writer   :John_Lennon .
-					  :Love_Me_Do       :writer   :Paul_McCartney .
+http://example.org/alan       http://example.org/instanceOf    http://example.org/Human .
+http://example.org/alan       http://example.org/placeOfBirth  http://example.org/warrington .
+http://example.org/alan       http://example.org/placeOfDeath  http://example.org/wilmslow .
+http://example.org/alan       http://example.org/dateOfBirth   "1912-06-23"^^http://www.w3.org/2001/XMLSchemadate .
+http://example.org/alan       http://example.org/employer      http://example.org/GCHQ .
+http://example.org/warrington http://example.org/country       http://example.org/uk .
+http://example.org/wilmslow   http://example.org/country       http://example.org/uk .
+http://example.org/wilmslow   http://example.org/instanceOf    http://example.org/town .
+http://example.org/bombe      http://example.org/discoverer    http://example.org/alan .
+http://example.org/bombe      http://example.org/instanceOf    http://example.org/computer .
+http://example.org/bombe      http://example.org/manufacturer  http://example.org/GCHQ .
 						</code>
 					</pre>
 				</section>
@@ -173,13 +145,16 @@
 					What are we trying to do?
 				</section>
 				<section>
-					<p>A solution between a data dump and a database</p>
-					<p class="fragment">A solution that stores bigger than RAM datasets</p>
-					<p class="fragment">A new data format for RDF</p>
+					<ul>
+						<li>An RDF data format</li>
+						<li class="fragment">Larger than RAM database</li>
+						<li class="fragment">Basic Graph Patterns</li>
+					</ul>
+
 				</section>
 
 				<section>
-					State of the art and Linked Data fragments
+					Where are we in the client-server axis?
 					<img src="images/clientServer.PNG" alt="">
 				</section>
 
@@ -224,16 +199,26 @@ http://example.org/Human --> 8
 				</section>
 
 				<section>
-					Operations
-					<p style="text-align: left;">
-						Subject retrieval - :Alan ? ? - S ?P ?O
-					</p>
-					<p style="text-align: left;">
-						Predicate retrieval - ? :instanceOf ? - ?S P ?O
-					</p>
-					<p style="text-align: left;">
-						Object retrieval - ? ? :Human - ?S ?P O
-					</p>
+					<p>Operations</p>
+
+					<ul class="fragment">
+						<li>
+							<code>
+							:Alan ?P ?O 
+							</code>
+						</li>
+						<li>
+							<code>
+							?S :instanceOf ?O
+							</code>
+						</li>
+						<li>
+							<code>
+							?S ?P :Human
+							</code>
+						</li>
+					</ul>
+
 				</section>
 				<section>
 					<p>Using Matrices / Adjacency Matrix</p>
@@ -241,17 +226,17 @@ http://example.org/Human --> 8
 				</section>
 
 				<section>
-					<p>Using Matrices / Adjacency Matrix - Subject retrieval</p>
+					<p>Using Matrices / Adjacency Matrix - :Alan ?P ?O </p>
 					<img src="images/matrix 2-row.PNG" alt="">
 				</section>
 
 				<section>
-					<p>Using Matrices / Adjacency Matrix - Object retrieval</p>
+					<p>Using Matrices / Adjacency Matrix - ?S :instanceOf ?O</p>
 					<img src="images/matrix 3-col.PNG" alt="">
 				</section>
 
 				<section>
-					<p>Using Matrices / Adjacency Matrix - Predicate retrieval</p>
+					<p>Using Matrices / Adjacency Matrix - ?S ?P :Human</p>
 					<img src="images/matrix 4 - index.PNG" alt="">
 				</section>
 
@@ -264,7 +249,7 @@ http://example.org/Human --> 8
 					Optimizations done
 				</section>
 				<section>
-					Change in orientation
+					<p>Allowing different orientations</p>
 					<pre>
 						<code>
 							pub enum ReferenceSystem {
@@ -280,19 +265,36 @@ http://example.org/Human --> 8
 				</section>
 
 				<section>
-					Sharding
+					<p>Sharding</p>
 					<img src="images/sharding.PNG" alt="">
 				</section>
 
 				<section>
-					This means that:
-					<p class="fragment">We can trade speed in querying for RAM space with sharding</p>
-					<p class="fragment">We can trade disk space </p>
+					<p>This means that:</p>
+					<ul>
+						<li class="fragment">We can trade speed in querying for RAM space with sharding</li>
+						<li class="fragment">We can trade disk space </li>
+					</ul>
 				</section>
 			</section>
 			<section>
+				<section>Results</section>
 				<section>
-					Results against HDT
+					
+						<div class="image-grid">
+							<img src="images/grafica2.png" alt="Image 1">
+							<img src="images/spo1.png" alt="Image 2">
+							<img src="images/spo2.png" alt="Image 3">
+							<img src="images/spo3.png" alt="Image 4">
+						</div>
+					
+				</section>
+			</section>
+			<section>
+				<p>Reproducibility</p>
+				<section>
+					<p>Is there a reproducibility crisis?</p>
+					<img src="images/reproducibility.PNG" alt="Image 4">
 				</section>
 			</section>
 			<section>
@@ -300,13 +302,17 @@ http://example.org/Human --> 8
 					Future work
 				</section>
 				<section>
-					<h2>Paper Publication</h2>
+	
+					<li>Paper Publication</li>
 					<iframe src="https://kgsw.org/" width="100%" height="600px" style="border:none;"></iframe>
 				</section>
 
 				<section>
-					Data standard
-					<img src="images/zarr-logo.png" alt="">
+					<ul>
+						<li>Data Specification</li>
+						<li>Library development</li>
+						<li>Test new layouts</li>
+					</ul>
 				</section>
 			</section>
 
