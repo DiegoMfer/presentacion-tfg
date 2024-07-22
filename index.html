@@ -1,46 +1,195 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>TFG Presentation</title>
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/white.css">
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	<style>
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        }
+        .iframe-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
-
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<h2>RDF in Zarr</h2>
+			</section>
+			<section>
+				<h3>Introduction</h1>
+					<section>
+						<ul>
+							<li class="fragment">Project sponsored by NumFocus</li>
+							<li class="fragment">Research project for Zarr technology</li>
+							<li class="fragment">Other projects sponsored by Numbfocus
+								<ul>
+									<li>Jupiter</li>
+									<li>MatPlotLib</li>
+									<li>Pandas</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+			</section>
+			<section>
 				<section>
-					Slide 1
-					<section>Slide 1.1</section>
-					<section>Slide 1.1</section>
-					<section>Slide 1.1</section>
+					What is Zarr?
 				</section>
-				<section>Slide 2</section>
-			</div>
+
+				<section>
+					Zarr is a project to store tensors
+					<img src="images/tensors.png" alt="" class="fragment">
+				</section>
+
+				<section>
+					Zarr is a project to store datasets bigger than RAM by loading only necessary chunks of information
+					<div class="iframe-container fragment">
+						<iframe 
+							src="https://hms-dbmi.github.io/vizarr/?source=https://uk1s3.embassy.ebi.ac.uk/idr/zarr/v0.1/4495402.zarr&viewState={%22zoom%22:-8.886003229134696,%22target%22:[460800,190464]}" 
+							frameborder="0" 
+							allowfullscreen>
+						</iframe>
+					</div>
+				</section>
+
+			</section>
+			<section>
+				<section>
+					What is RDF?
+				</section>
+				<section>
+					Resource Description Framework (RDF) is a general framework for representing interconnected data on
+					the web.
+					<img src="images/RDFGraphMerged.png" alt="" class="fragment">
+				</section>
+				<section>
+					RDF stores data in the form of triples
+					<p>(Subject, Predicate, Object)</p>
+					<img src="images/Basic_RDF_Graph.svg" alt="">
+				</section>
+				<section>
+					Data dump example in ntriples format:
+					<pre>
+						<code>
+					  PREFIX : <http://stardog.com/tutorial/>
+					  PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+					  PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+					  
+					  :The_Beatles      rdf:type  :Band .
+					  :The_Beatles      :name     "The Beatles" .
+					  :The_Beatles      :member   :John_Lennon .
+					  :The_Beatles      :member   :Paul_McCartney .
+					  :The_Beatles      :member   :Ringo_Starr .
+					  :The_Beatles      :member   :George_Harrison .
+					  :John_Lennon      rdf:type  :SoloArtist .
+					  :Paul_McCartney   rdf:type  :SoloArtist .
+					  :Ringo_Starr      rdf:type  :SoloArtist .
+					  :George_Harrison  rdf:type  :SoloArtist .
+					  :Please_Please_Me rdf:type  :Album .
+					  :Please_Please_Me :name     "Please Please Me" .
+					  :Please_Please_Me :date     "1963-03-22"^^xsd:date .
+					  :Please_Please_Me :artist   :The_Beatles .
+					  :Please_Please_Me :track    :Love_Me_Do .
+					  :Love_Me_Do       rdf:type  :Song .
+					  :Love_Me_Do       :name     "Love Me Do" .
+					  :Love_Me_Do       :length   125 .
+					  :Love_Me_Do       :writer   :John_Lennon .
+					  :Love_Me_Do       :writer   :Paul_McCartney .
+						</code>
+					</pre>
+				</section>
+
+				<section>
+					<h2 style="text-align: center;">UniProt SPARQL Endpoint</h2>
+					<div style="display: flex; justify-content: center; align-items: center; height: 100%; flex-direction: column;">
+					  <a href="https://sparql.uniprot.org/uniprot" target="_blank" style="font-size: 1.5em; color: blue; text-decoration: underline;">Open UniProt SPARQL Endpoint</a>
+					</div>
+				</section>
+
+			</section>
+			
+			<section>
+				<section>
+					What are we trying to do?
+				</section>
+				<section>
+					A solution between a data dump and a database
+					<img src="images/clientServer.PNG" alt="">
+				</section>
+				<section>
+					A solution that stores bigger than RAM datasets
+				</section>
+				<section>
+					A new data format for RDF
+				</section>
+			</section>
+			
+			<section>
+				State of the art for RDF data storage
+				<section>If we are talking in behalf of data formats
+					<section>HDT</section>
+					<section>Ntriples</section>
+					<section>Turtle</section>
+				</section>
+				<section>If we are talking in behalf of RDF databases
+					<section>SparQL</section>
+					<section>Apache Fuseki</section>
+					<section>BeakGraph</section>
+					<section>OpenLink Virtuoso</section>
+					<section>Neo4J</section>
+				</section>
+			</section>
+			<section>
+				How do we store RDF data in Zarr
+				<section>Using Matrices
+					<section>n2</section>
+					<section>n3</section>
+				</section>
+				<section>Using Tabular Layout</section>
+				<section>Other alternatives</section>
+			</section>
+			<section>
+				Results
+				<section>LUBM benchmarks</section>
+				<section>Custom benchmarks</section>
+				<section>Benchmark results</section>
+				<section>Conclusions</section>
+			</section>
+			<section>
+				Future work
+				<section>Paper publication</section>
+				<section>Data standard</section>
+			</section>
 		</div>
+	</div>
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		Reveal.initialize({
+			hash: true,
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
-                navigationMode: 'linear',
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
 </html>
